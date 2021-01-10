@@ -31,11 +31,11 @@ auth().then(authentication => {
 
   fetch(`https://api.github.com/repos/${asset.author.login}/${repo.full_name}/releases/assets/${asset.assets[0].id}`, {
     headers: myHeaders,
-    redirect: 'manual',
+    redirect: 'follow',
     method: 'get'
   })
     .then(response => {
-      const url = response.headers.get("location");
+      const url = response.url
       fetch(url).then(async r => {
         const buffer = await r.buffer();
         fs.writeFileSync("zip.zip", buffer);
