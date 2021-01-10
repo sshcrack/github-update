@@ -1,3 +1,2 @@
-cd /home/user/typescript-sshbot
-gulp
-pm2 restart 3
+node build/main/run.js
+echo "Executed"
