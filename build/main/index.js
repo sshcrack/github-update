@@ -22,12 +22,14 @@ auth().then(authentication => {
     });
     app.use(body_parser_1.default.json());
     app.post("/update", async (req, res) => {
+	console.log("Request!")
         const body = req.body;
         const signature = req.header("X-Hub-Signature-256");
         if (!signature)
             return res.send({ error: "No Signature" });
         const valid = checkSignature(JSON.stringify(body), signature === null || signature === void 0 ? void 0 : signature.substr("sha256=".length));
-        if (!valid)
+         console.log("Valid", valid)
+	if (!valid)
             return res.send({ error: "Invalid signature" });
         const asset = (await octokit.repos.getRelease({
             owner: "sshcrack",
@@ -36,6 +38,7 @@ auth().then(authentication => {
         })).data;
         await promises_1.default.writeFile("asset.json", JSON.stringify(asset));
         await promises_1.default.writeFile("repository.json", JSON.stringify(body));
+	console.log("Running proc")
         execa_1.default("bash", ["-c", "./update.sh"]).then(e => {
             console.log("Process finished", e);
         });

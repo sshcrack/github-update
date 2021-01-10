@@ -18,7 +18,7 @@ const response: Github = JSON.parse(fs.readFileSync("./repository.json", "utf-8"
 const asset: AssetInterface = JSON.parse(fs.readFileSync("./asset.json", "utf-8"))
 const repo = response.repository
 
-const botLocation = "./extract"
+const botLocation = "/home/user/typescript-sshbot"
 
 auth().then(authentication => {
   const url = `https://api.github.com/repos/${repo.owner.login}/${repo.name}/releases/assets/${asset.assets[0].id}`;
@@ -26,10 +26,10 @@ auth().then(authentication => {
   console.log(authentication)
 
   const myHeaders = new Headers();
-  myHeaders.append("Authorization", "token" + process.env.TOKEN);
+  myHeaders.append("Authorization", "token " + process.env.TOKEN);
   myHeaders.append("Accept", "application/octet-stream");
 
-  fetch(`https://api.github.com/repos/${asset.author.login}/${repo.full_name}/releases/assets/${asset.assets[0].id}`, {
+  fetch(url, {
     headers: myHeaders,
     redirect: 'follow',
     method: 'get'
@@ -39,14 +39,14 @@ auth().then(authentication => {
       fetch(url).then(async r => {
         const buffer = await r.buffer();
         fs.writeFileSync("zip.zip", buffer);
-        unzip("zip.zip", {
+        await unzip("zip.zip", {
           dir: path.resolve(botLocation)
         })
         console.log("Installing packages")
-        execa("npm", ["i"], { cwd: path.resolve(botLocation) })
+        await execa("npm", ["i"], { cwd: path.resolve(botLocation) })
 
         console.log("restarting pm2")
-        execa("pm2", ["restart", "4"], { cwd: path.resolve(botLocation) })
+        await execa("pm2", ["restart", "4"], { cwd: path.resolve(botLocation) })
       });
     })
 })
