@@ -26,7 +26,7 @@ auth().then(authentication => {
   console.log(authentication)
 
   const myHeaders = new Headers();
-  myHeaders.append("Authorization", "token 2e7a4736684c857770815430a6fbc917ceab052a");
+  myHeaders.append("Authorization", "token" + process.env.TOKEN);
   myHeaders.append("Accept", "application/octet-stream");
 
   fetch(`https://api.github.com/repos/${asset.author.login}/${repo.full_name}/releases/assets/${asset.assets[0].id}`, {
