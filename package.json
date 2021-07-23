@@ -45,7 +45,7 @@
     "@bitauth/libauth": "^1.17.1",
     "@octokit/auth-token": "^2.4.4",
     "@octokit/rest": "^18.0.12",
-    "@types/node-fetch": "^2.5.7",
+    "@types/node-fetch": "^2.5.12",
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "execa": "^5.0.0",
